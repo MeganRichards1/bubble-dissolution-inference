@@ -2,21 +2,25 @@ import pandas as pd
 
 # Load raw digitised data
 df = pd.read_csv("data/raw/raw_curve.csv")
+condition_names = [val for i, val in enumerate(df.columns) if i % 2 == 0]
 
-# Rename columns
-df.columns = ["time_s", "radius_um", "condition_id"]
+df = df.iloc[1:, :]  # Drop the first column which is just an index
+n = df.shape[1] // 2
 
-# Remove missing rows
-df = df.dropna()
+df_long = pd.concat(
+    [
+        pd.DataFrame({
+            "time_s": df.iloc[:, i*2],
+            "radius_um": df.iloc[:, i*2 + 1],
+            "condition_id": condition_names[i]
+        })
+        for i in range(n)
+    ],
+    ignore_index=True
+).dropna()
 
-# Within each condition id, sort by ascending time
-df = df.sort_values(by=["condition_id", "time_s"])
-
-# Ensure numeric types
-df["time_s"] = pd.to_numeric(df["time_s"])
-df["radius_um"] = pd.to_numeric(df["radius_um"])
 
 # Save cleaned data
-df.to_csv("data/processed/bubble_curves.csv", index=False)
+df_long.to_csv("data/processed/bubble_curves.csv", index=False)
 
 print("Saved cleaned data to data/processed/bubble_curves.csv")
