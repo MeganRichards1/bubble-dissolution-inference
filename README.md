@@ -1,0 +1,1 @@
+Experimental results are taken from Duncan, P.B. and Needham, D., 2004. Test of the Epstein− Plesset Model for gas microparticle dissolution in aqueous media: effect of surface tension and gas undersaturation in solution. Langmuir, 20(7), pp.2567-2578.
